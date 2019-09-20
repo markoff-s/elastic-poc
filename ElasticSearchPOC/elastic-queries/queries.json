@@ -1,0 +1,160 @@
+# get all indicies
+GET /_cat/indices?v
+
+# delete index
+DELETE /issuers
+
+# get index mapping
+GET /issuers/_mapping
+
+# get all docs
+GET /issuers/_search
+
+# get doc by id
+GET /issuers/_doc/Y7hVM2sBdRFo5txNoecY
+
+# delete doc by id
+DELETE /issuers/_doc/arhoM2sBdRFo5txN1ucP
+
+# insert new doc
+POST /issuers/_doc
+{
+  "issuer_id": 100,
+  "tag_name": "Description",
+  "tag_value": "Apple was poised for its fourth straight gain as it tries to reclaim its 200-day moving average. Microsoft, meanwhile, cleared a flat base with a 131.47 buy point. Shares rose 3%.",
+  "from": "2019-01-01",
+  "to": "2019-03-01"
+}
+
+# partial doc update
+POST /issuers/_update/arhoM2sBdRFo5txN1ucP
+{
+  "doc": {
+    "from": "2015-01-01"
+  }
+}
+
+# full doc update
+POST /issuers/_doc/arhoM2sBdRFo5txN1ucP
+{
+  "issuer_id": 100,
+  "tag_name": "Description",
+  "tag_value": "Stocks jumped on Friday, building on strong weekly gains, as weak economic data increased the odds of easier monetary policy from the Federal Reserve."
+  
+}
+
+
+GET /issuers/_search
+{
+  "query": {
+    "range": {
+      "from": {
+        "gte": "2019-01-01"
+      }
+    }
+  }
+}
+
+# add new property to index mapping
+PUT /issuers/_mapping
+{
+  "properties": {
+    "to2": {
+      "type": "date"
+    }
+  }
+}
+
+GET /issuers/_search
+{
+  "query": {
+    "bool": {
+      "must": [
+        {"match": {
+          "tag_value": "gain apple"
+        }},
+        {
+          "match_phrase": {
+            "tag_value": "Shares rose"
+          }
+        }
+    ]}
+  }
+}
+
+GET /issuers/_search
+{
+  "query": {
+    "match": {
+      "tag_value": "gains weekly"
+    }
+  }
+}
+
+GET /issuers/_search
+{
+  "query": {
+    "match_phrase": {
+      "tag_value": "weekly gains"
+    }
+  }
+}
+
+
+PUT /issuers/_doc/WrigLmsBdRFo5txNWueK
+{
+  "issued_id": 100,
+  "tag_name": "Rating",
+  "tag_value": "AAA BB"
+}
+
+GET /issuers/_search
+
+GET /issuers/_search
+{
+  "query": {
+    "match": {
+      "tag_value": "BB AAA"
+    }
+  }
+}
+
+GET /issuers/_search
+{
+  "query": {
+    "match_phrase": {
+      "tag_value": "AAA BB"
+    }
+  }
+}
+
+
+GET /issuers/_mapping
+
+
+POST /issuers/_doc/_bulk
+{
+  "issued_id": 100,
+  "tag_name": "Rating",
+  "tag_value": "AAA"
+}
+
+
+############ Analyzers ############
+GET /issuers/_analyze
+{
+  "tokenizer": "standard",
+  "text": "Apple was poised. So, it's cool! test@xz.com?"
+}
+
+GET /issuers/_analyze
+{
+  "tokenizer": "whitespace",
+  "text": "Apple was poised. So, it's cool! test@xz.com?"
+}
+
+
+
+
+
+
